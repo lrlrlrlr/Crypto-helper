@@ -4,6 +4,10 @@
 ## Why have this
 I am doing some crypto challenges this week. The challenges always have some encoded string and I need to guess the method to decode (eg. base64, md5, caesar, etc.)
 
+
+## todo:
+1. add the function of MD5 decryption
+2. set it in my blog and build an api service for this tools
  
 
 It's kinda waste time if I try it one by one, 
