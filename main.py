@@ -176,11 +176,72 @@ def decoding(string):
     #     print(f"Caesar: no result!".center(50))
 
     # Decode with MD5
-    print(f"{md5_net()}".center(50))
+    # print(f"{md5_net()}".center(50))
+
+    print(f"Check my dictionary: ...".ljust(ljust_size), end='')
+    search_result = hd.search_value(string)
+    if search_result:
+        print('[Found!]')
+        print(f"Origin Text: {search_result[0]}\nMethod: {search_result[1]}".center(50))
+    else:
+        print("[None]")
+
+
+import pandas
+class hashdict:
+    """
+    Record the hash history for dictionary
+    """
+    def __init__(self):
+        self.hash_func = ["md5", "sha_1", "sha_256", "sha_384","sha_512"]
+        try:
+            self.df = pandas.read_csv("hash.csv", index_col='string')
+        except FileNotFoundError:
+            self._df_not_found()
+            print("hashdict init fail: try to rerun the script.")
+            exit()
+            # self.df = pandas.read_csv("hash.csv", index_col='string')
+
+
+
+
+
+
+    def _df_not_found(self):
+        """if hash.csv not found, then create it"""
+        df = pandas.DataFrame(columns=['string']+self.hash_func)
+        df.set_index('string')
+        df.to_csv('hash.csv', index=False)
+
+        pandas.read_csv()
+
+
+    def record(self, string):
+        self.df.loc[string] = [md5(string), SHA_1(string), SHA_256(string), SHA_384(string), SHA_512(string)]
+
+
+    def search_value(self, search_value):
+        '''
+
+        :param search_value: '66ba13e5474d241e80f7a12ed434645d'
+        :return: ( 'rrrrrrrrrr', 'md5', '66ba13e5474d241e80f7a12ed434645d')
+        '''
+        if search_value in self.df.values:
+            for _, cols in self.df.iterrows():
+                for k,v in cols.items():
+                    if search_value == v:
+                        return (cols.name, k, v)
+
+        else:
+            # the value is not in our records
+            return None
+        pass
 
 
 if __name__ == '__main__':
     # main()
+    hd = hashdict()
+
     while True:
         print("\n\n\n -------------------------------------------------")
         selection = int(input("Are you going to encode  or decode?\n 1. encode\n 2. decode\nInput a number: "))
@@ -189,5 +250,6 @@ if __name__ == '__main__':
 
         if selection == 1:
             encoding(string)
+            hd.record(string)
         elif selection == 2:
             decoding(string)
