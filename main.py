@@ -98,33 +98,50 @@ def caesar_de(a, key):
     return caesar_decode(a, key)
 
 
+ljust_size = 15
+
 def encoding(string):
+    # Original text
+    print(f"Original text: ".ljust(ljust_size), end="")
+    print(string.center(50))
     # encode with str reverse
-    print(f"String Reverse: {string[::-1]}".center(50))
+    print(f"String Reverse:".ljust(ljust_size), end="")
+    print(f"{string[::-1]}".center(50))
 
     # encode with Base64
-    print(f"Base64: {b64en(string)}".center(50))
+    print(f"Base64: ".ljust(ljust_size), end="")
+    print(f"{b64en(string)}".center(50))
+
     # encode with Caesar
     for i in range(26):
-        print(f"Caesar [key={i}]: {caesar_en(string, i)}".center(50))
+        print(f"Caesar [key={i}]: ".ljust(ljust_size), end="")
+        print(f"{caesar_en(string, i)}".center(50))
 
     # encode with MD5
-    print(f"MD5: {md5(string)}".center(50))
+    print(f"MD5: ".ljust(ljust_size), end="")
+    print(f"{md5(string)}".center(50))
 
 
 def decoding(string):
+    # Original text
+    print(f"Original text: ".ljust(ljust_size), end="")
+    print(string.center(50))
+
     # Decode with str reverse
-    print(f"String Reverse: {string[::-1]}".center(50))
+    print(f"String Reverse: ".ljust(ljust_size), end="")
+    print(f"{string[::-1]}".center(50))
 
     # Decode with Base64
     try:
-        print(f"Base64: {b64de(string)}".center(50))
+        print(f"Base64: ".ljust(ljust_size), end="")
+        print(f"{b64de(string)}".center(50))
     except:
-        print(f"Base64: no result!".center(50))
+        print(f"no result".center(50))
     # Decode with Caesar
     # try:
     for i in range(26):
-        print(f"Caesar [key={i}]: {caesar_de(string, i)}".center(50))
+        print(f"Caesar [key={i}]: ".ljust(ljust_size), end="")
+        print(f"{caesar_de(string, i)}".center(50))
     # except:
     #     print(f"Caesar: no result!".center(50))
 
