@@ -1,4 +1,4 @@
-# _*_ coding:UTF-8 _*_
+# coding: UTF-8
 # main.py
 
 '''
@@ -100,6 +100,23 @@ def caesar_de(a, key):
 
 ljust_size = 15
 
+
+def SHA_1(string):
+    return hashlib.sha1(string.encode()).hexdigest()
+
+
+def SHA_256(string):
+    return hashlib.sha256(string.encode()).hexdigest()
+
+
+def SHA_384(string):
+    return hashlib.sha3_384(string.encode()).hexdigest()
+
+
+def SHA_512(string):
+    return hashlib.sha3_512(string.encode()).hexdigest()
+
+
 def encoding(string):
     # Original text
     print(f"Original text: ".ljust(ljust_size), end="")
@@ -120,6 +137,19 @@ def encoding(string):
     # encode with MD5
     print(f"MD5: ".ljust(ljust_size), end="")
     print(f"{md5(string)}".center(50))
+
+    # SHA series
+    print(f"SHA_1: ".ljust(ljust_size), end="")
+    print(f"{SHA_1(string)}".center(50))
+
+    print(f"SHA_256: ".ljust(ljust_size), end="")
+    print(f"{SHA_256(string)}".center(50))
+
+    print(f"SHA_384: ".ljust(ljust_size), end="")
+    print(f"{SHA_384(string)}".center(50))
+
+    print(f"SHA_512: ".ljust(ljust_size), end="")
+    print(f"{SHA_512(string)}".center(50))
 
 
 def decoding(string):
