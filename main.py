@@ -5,10 +5,10 @@
 This is a small tool to solove problem of CRYPTO in CTF.
 '''
 
+import base64
+import hashlib
 import urllib.request
 
-import hashlib
-import base64
 from pycipher import Caesar
 
 
@@ -54,8 +54,6 @@ def str_reverse(a):
 
 
 def md5_net(hash='5d41402abc4b2a76b9719d911017c592'):
-    import requests
-
     url = "https://www.md5online.org/md5-decrypt.html"
     print(f"Please decrypt the md5 at here: {url}")
     #
@@ -178,22 +176,25 @@ def decoding(string):
     # Decode with MD5
     # print(f"{md5_net()}".center(50))
 
-    print(f"Check my dictionary: ...".ljust(ljust_size), end='')
+    print(f"\nCheck my dictionary: ...".ljust(ljust_size), end='')
     search_result = hd.search_value(string)
     if search_result:
         print('[Found!]')
-        print(f"Origin Text: {search_result[0]}\nMethod: {search_result[1]}".center(50))
+        print(f"Origin Text: {search_result[0]}\nMethod: {search_result[1]}")
     else:
         print("[None]")
 
 
 import pandas
+
+
 class hashdict:
     """
     Record the hash history for dictionary
     """
+
     def __init__(self):
-        self.hash_func = ["md5", "sha_1", "sha_256", "sha_384","sha_512"]
+        self.hash_func = ["md5", "sha_1", "sha_256", "sha_384", "sha_512"]
         try:
             self.df = pandas.read_csv("hash.csv", index_col='string')
         except FileNotFoundError:
@@ -202,23 +203,20 @@ class hashdict:
             exit()
             # self.df = pandas.read_csv("hash.csv", index_col='string')
 
-
-
-
-
-
     def _df_not_found(self):
         """if hash.csv not found, then create it"""
-        df = pandas.DataFrame(columns=['string']+self.hash_func)
+        df = pandas.DataFrame(columns=['string'] + self.hash_func)
         df.set_index('string')
-        df.to_csv('hash.csv', index=False)
+        self.save()
 
         pandas.read_csv()
 
-
     def record(self, string):
         self.df.loc[string] = [md5(string), SHA_1(string), SHA_256(string), SHA_384(string), SHA_512(string)]
+        self.save()
 
+    def save(self):
+        self.df.to_csv('hash.csv', index=False)
 
     def search_value(self, search_value):
         '''
@@ -228,14 +226,28 @@ class hashdict:
         '''
         if search_value in self.df.values:
             for _, cols in self.df.iterrows():
-                for k,v in cols.items():
+                for k, v in cols.items():
                     if search_value == v:
                         return (cols.name, k, v)
 
         else:
             # the value is not in our records
             return None
-        pass
+
+
+def learn_hash(file):
+    '''
+    expand our hash table by training with a file
+    :param file:
+    :return:
+    '''
+    hd = hashdict()
+    with open(file) as f:
+        train_lst = f.readlines()
+
+    train_lst = [word.strip('\n') for word in train_lst]
+    for word in train_lst:
+        hd.record(word)
 
 
 if __name__ == '__main__':
