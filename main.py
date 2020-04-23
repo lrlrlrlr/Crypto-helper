@@ -197,6 +197,7 @@ class hashdict:
         self.hash_func = ["md5", "sha_1", "sha_256", "sha_384", "sha_512"]
         try:
             self.df = pandas.read_csv("hash.csv", index_col='string')
+            # self.df.set_index('string')
         except FileNotFoundError:
             self._df_not_found()
             print("hashdict init fail: try to rerun the script.")
@@ -205,18 +206,17 @@ class hashdict:
 
     def _df_not_found(self):
         """if hash.csv not found, then create it"""
-        df = pandas.DataFrame(columns=['string'] + self.hash_func)
-        df.set_index('string')
-        self.save()
+        self.df = pandas.DataFrame(columns=['string'] + self.hash_func)
+        self.df.set_index('string')
+        self.df.to_csv('hash.csv', index=False)
 
-        pandas.read_csv()
 
     def record(self, string):
         self.df.loc[string] = [md5(string), SHA_1(string), SHA_256(string), SHA_384(string), SHA_512(string)]
         self.save()
 
     def save(self):
-        self.df.to_csv('hash.csv', index=False)
+        self.df.to_csv('hash.csv')
 
     def search_value(self, search_value):
         '''
@@ -253,7 +253,7 @@ def learn_hash(file):
 if __name__ == '__main__':
     # main()
     hd = hashdict()
-
+    # learn_hash('common_english_words.txt')
     while True:
         print("\n\n\n -------------------------------------------------")
         selection = int(input("Are you going to encode  or decode?\n 1. encode\n 2. decode\nInput a number: "))
